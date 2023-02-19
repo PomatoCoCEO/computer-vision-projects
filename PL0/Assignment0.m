@@ -14,6 +14,13 @@ factor = 8;
 for i = 1 : numel(filter_strings)
     filter = filter_from_string(filter_strings{i});
     new_image = apply_color_filter(filter, image_raw_db) * 8;
+    figure(1)
     subplot(2,2,i)
     imshow(new_image)
+    mos = mosaicise(new_image, 'gray');
+    figure(2);
+    subplot(2,2,i);
+    imshow(mos);
 end
+
+
