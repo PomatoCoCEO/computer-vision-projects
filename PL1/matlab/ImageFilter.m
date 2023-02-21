@@ -36,7 +36,7 @@ function [img1] = ImageFilter(img0, h)
         
     else
     
-        upside_down = h(end:-1:1, end:-1:1);
+        upside_down = h(end:-1:1, end:-1:1); % if we reverse the matrix a convolution becomes a correlation, easy to represent in MATLAB
         
         for i =1 :height
             for j = 1:width
