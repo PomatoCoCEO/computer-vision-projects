@@ -29,7 +29,7 @@ function Assignment()
     % standard deviations from the mean will be considered for the hough filter.
     percentile_value = 99;
 
-    hough_threshold = prctile(img_edges, percentile_value);% mean2(img_edges) + std_threshold* std2(img_edges);
+    hough_threshold = prctile(img_edges, percentile_value,[1,2]);% mean2(img_edges) + std_threshold* std2(img_edges);
     [H, rhoScale, thetaScale] = HoughTransform(img_edges, hough_threshold, 1, pi/180);
     imshow(H);
 end
