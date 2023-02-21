@@ -24,9 +24,12 @@ function Assignment()
 
     % now for the edge detection pipeline
     [img_edges, img_gradient_magnitude, img_gradient_orientation] = EdgeFilter(img, 0.5);
-    std_threshold = 2; % only the magnitudes with a distance of (std_threshold = 2) 
+    % std_threshold = 2; % only the magnitudes with a distance of (std_threshold = 2) 
+    
     % standard deviations from the mean will be considered for the hough filter.
-    hough_threshold = mean2(img_edges) + std_threshold* std2(img_edges);
+    percentile_value = 99;
+
+    hough_threshold = prctile(img_edges, percentile_value);% mean2(img_edges) + std_threshold* std2(img_edges);
     [H, rhoScale, thetaScale] = HoughTransform(img_edges, hough_threshold, 1, pi/180);
     imshow(H);
 end
