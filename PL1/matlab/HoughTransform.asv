@@ -14,6 +14,8 @@ function [H, rhoScale, thetaScale] = HoughTransform(Im, threshold, rhoRes, theta
 
     rhoScale = (realRhoInterval / 2) : (realRhoInterval) : (rhoMax - realRhoInterval/2);
     thetaScale = (realThetaInterval / 2) : realThetaInterval : (thetaMax - realThetaInterval/2);
+    disp(rhoScale(end))
+    disp(thetaScale(end) * 180 / pi)
 
     for i = 1:height
         for j = 1:width
@@ -21,10 +23,9 @@ function [H, rhoScale, thetaScale] = HoughTransform(Im, threshold, rhoRes, theta
                 for thetaPos = 1 : noBinsTheta
                     theta = thetaScale(1,thetaPos);
                     rho = i * sin(theta) + j * cos(theta);
-                    if rho >= 0
-                        rhoPos = floor((rho) / realRhoInterval) + 1;
-                        H(rhoPos, thetaPos) = H(rhoPos, thetaPos) +1;
-                    end
+
+                    rhoPos = floor((rho + rhoMax) / realRhoInterval) + 1;
+                    H(rhoPos, thetaPos) = H(rhoPos, thetaPos) +1;
                 end
             end
         end
