@@ -15,8 +15,9 @@ function [rhos, thetas] = HoughLines(H, nLines)
 
     % we can use maxk with indices to help
     [~,I] = maxk(H_copy(:), nLines);
-    no_cols = size(H_copy, 2);
-    rhos = floor(I / no_cols) + 1;
-    thetas = mod(I, no_cols) +1;
+    % no_cols = size(H_copy, 2);
+    no_lines = size(H_copy,1);
+    rhos = mod(I, no_lines);
+    thetas = floor(I / no_lines) +1;
 end
         

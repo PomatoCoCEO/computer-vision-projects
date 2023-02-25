@@ -11,7 +11,7 @@ function [img1] = ImageFilter(img0, h)
     
     filtered_image = zeros(height,width);
     
-    if S(1,1) ~=0
+    if abs(S(1,1)) < 1e-9
         % perform the convolution using two filters
         filtered_image_1 = zeros(height,size(img_padded, 2));
         

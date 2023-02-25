@@ -1,14 +1,20 @@
 clear;
 
 datadir     = '../data';    %the directory containing the images
-resultsdir  = '../results'; %the directory for dumping results
+
 
 %parameters
 sigma     = 2;
 threshold = 0.03;
 rhoRes    = 2;
 thetaRes  = pi/90;
-nLines    = 50;
+nLines    = 100;
+% percentile_value = 98;
+image_threshold = 0.5;
+test_no = sprintf('sigma-%f-edge-threshold-%f-lines-%d', sigma, image_threshold, nLines);
+
+resultsdir  = sprintf('../results/test%s',test_no); %the directory for dumping results
+mkdir(resultsdir);
 %end of parameters
 
 imglist = dir(sprintf('%s/*.jpg', datadir));
@@ -26,15 +32,16 @@ for i = 1:numel(imglist)
     img = double(img) / 255;
    
     %actual Hough line code function calls%  
-    [Im] = EdgeFilter(img, sigma);   
-    [H,rhoScale,thetaScale] = HoughTransform(Im, threshold, rhoRes, thetaRes);
+    [Im] = EdgeFilter(img, sigma);
+    % prctile(Im, percentile_value,[1,2]);
+    [H,rhoScale,thetaScale] = HoughTransform(Im, image_threshold, rhoRes, thetaRes);
     [rhos, thetas] = HoughLines(H, nLines);
-    lines = houghlines(Im>threshold, 180*(thetaScale/pi), rhoScale, [rhos,thetas],'FillGap',5,'MinLength',10);
+    lines = houghlines(Im>image_threshold, 180*(thetaScale/pi), rhoScale, [rhos,thetas],'FillGap',5,'MinLength',10);
     
-    %everything below here just saves the outputs to files%
+    % everything below here just saves the outputs to files%
     fname = sprintf('%s/%s_01edge.png', resultsdir, imgname);
     imwrite(sqrt(Im/max(Im(:))), fname);
-    fname = sprintf('%s/%s_02threshold.png', resultsdir, imgname);
+    fname = sprintf('%s/%s_02threshold.png',resultsdir, imgname);
     imwrite(Im > threshold, fname);
     fname = sprintf('%s/%s_03hough.png', resultsdir, imgname);
     imwrite(H/max(H(:)), fname);

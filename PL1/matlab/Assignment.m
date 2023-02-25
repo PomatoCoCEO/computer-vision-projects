@@ -1,7 +1,7 @@
 function Assignment()
  % this part can be turned into a cycle for the testing of multiple kinds
  % of filters. Still it appears to be working for both cases.
-    img = double(rgb2gray(imread("../data/img00.jpg")));
+    img = double(rgb2gray(imread("../data/img00.jpg"))) / 255;
     % test thing with sobel filter
     filter_sobel = fspecial("sobel");
     disp('sobel - starting implemented filter passing...');
@@ -23,7 +23,13 @@ function Assignment()
     fprintf("average - Example: first element of both: %f and %f\n",img_avg_implemented(1,1), img_avg_matlab(1,1));
 
     % now for the edge detection pipeline
-    [img_edges, img_gradient_magnitude, img_gradient_orientation] = EdgeFilter(img, 0.5);
+    img_edges = EdgeFilter(img, 0.5);
+    BW = edge(img, 'Sobel');
+
+    implemented_edges_greater_0 = img_edges > 1e-9;
+    matlab_edges_greater_0 = BW > 0;
+    difference = abs(implemented_edges_greater_0 - matlab_edges_greater_0);
+    fprintf("edge detection - differences: %d", sum(difference(:)));
     % std_threshold = 2; % only the magnitudes with a distance of (std_threshold = 2) 
     
     % standard deviations from the mean will be considered for the hough filter.
@@ -32,4 +38,7 @@ function Assignment()
     hough_threshold = prctile(img_edges, percentile_value,[1,2]);% mean2(img_edges) + std_threshold* std2(img_edges);
     [H, rhoScale, thetaScale] = HoughTransform(img_edges, hough_threshold, 1, pi/180);
     imshow(H);
+
+    [rhos, thetas] = HoughLines(H, 30);
+    
 end
