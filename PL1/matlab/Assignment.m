@@ -4,6 +4,7 @@ function Assignment()
     img = double(rgb2gray(imread("../data/img00.jpg"))) / 255;
     % test thing with sobel filter
     filter_sobel = fspecial("sobel");
+    
     disp('sobel - starting implemented filter passing...');
     img_sobel_implemented = ImageFilter(img,filter_sobel);
     disp('sobel - starting MATLAB filter passing...');

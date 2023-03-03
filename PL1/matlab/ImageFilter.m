@@ -11,7 +11,7 @@ function [img1] = ImageFilter(img0, h)
     
     filtered_image = zeros(height,width);
     
-    if abs(S(1,1)) < 1e-9
+    if abs(S(1,1)) > 1e-9 && abs(S(2,2)) < 1e-9
         % perform the convolution using two filters
         filtered_image_1 = zeros(height,size(img_padded, 2));
         
@@ -19,7 +19,10 @@ function [img1] = ImageFilter(img0, h)
         upside_down_vertical = vertical_kernel(end:-1:1);
         for i = 1:height
             for j = 1:size(img_padded,2)
-                filtered_image_1(i,j) = sum(upside_down_vertical .* img_padded(i:i+no_lines_filter-1, j));
+                for k = 1:no_lines_filter
+                    filtered_image_1(i,j) = filtered_image_1(i,j) + img_padded(i+k-1,j) * upside_down_vertical(k);
+                end
+                % filtered_image_1(i,j) = sum(upside_down_vertical .* img_padded(i:i+no_lines_filter-1, j));
             end
         end
         
@@ -27,20 +30,25 @@ function [img1] = ImageFilter(img0, h)
         upside_down_horizontal = horizontal_kernel(1, end:-1:1);
         for i = 1:height
             for j = 1:width
-                % size(upside_down_horizontal)
-                %size(img_padded(i, j:j+no_columns_filter-1))
-                %g  = upside_down_horizontal .* img_padded(i, j:j+no_columns_filter-1)
-                filtered_image(i,j) = sum(upside_down_horizontal .* filtered_image_1(i, j:j+no_columns_filter-1));
+                for k = 1:no_columns_filter
+                    filtered_image(i,j) = filtered_image(i,j) + filtered_image_1(i,j+k-1) * upside_down_horizontal(k);
+                end
+
+                % filtered_image(i,j) = sum(upside_down_horizontal .* filtered_image_1(i, j:j+no_columns_filter-1));
             end
         end
         
     else
     
         upside_down = h(end:-1:1, end:-1:1); % if we reverse the matrix a convolution becomes a correlation, easy to represent in MATLAB
-        
         for i =1 :height
             for j = 1:width
-                filtered_image(i,j) = sum(upside_down .* img_padded(i:i+no_lines_filter-1, j:j+no_columns_filter-1), [1,2] );
+                for k = 1:no_lines_filter
+                    for m = 1:no_columns_filter
+                        filtered_image(i,j) = filtered_image(i,j) + upside_down(k,m) * img_padded(i+k-1,j+m-1);
+                    end
+                end
+                % filtered_image(i,j) = sum(upside_down .* img_padded(i:i+no_lines_filter-1, j:j+no_columns_filter-1), [1,2] );
             end
         end
         % perform the convolution using the filter itself
