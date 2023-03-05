@@ -1,4 +1,4 @@
-function [H, rhoScale, thetaScale] = HoughTransform(Im, threshold, rhoRes, thetaRes)
+function [H, rhoScale, thetaScale] = HoughTransform(Im, threshold, rhoRes, thetaRes, acc_mode)
     % assuming that the resolution is given by radians in thetaRes and by units of length in rhoRes
     % im is the edge magnitude scale
     height = size(Im,1);
@@ -14,7 +14,12 @@ function [H, rhoScale, thetaScale] = HoughTransform(Im, threshold, rhoRes, theta
 
     rhoScale = (realRhoInterval / 2) : (realRhoInterval) : (rhoMax - realRhoInterval/2);
     thetaScale = (realThetaInterval / 2) : realThetaInterval : (thetaMax - realThetaInterval/2);
-
+    if strcmp(acc_mode, 'gradient-based')
+        disp('gradient-based increment hough transform');
+    elseif strcmp(acc_mode, 'incrementation-based')
+        disp('unitary increment hough transform');
+    end
+      
     for i = 1:height
         for j = 1:width
             if Im(i,j) >= threshold
@@ -23,7 +28,11 @@ function [H, rhoScale, thetaScale] = HoughTransform(Im, threshold, rhoRes, theta
                     rho = i * sin(theta) + j * cos(theta);
                     if rho >= 0
                         rhoPos = floor((rho) / realRhoInterval) + 1;
-                        H(rhoPos, thetaPos) = H(rhoPos, thetaPos) +1;
+                        if strcmp(acc_mode, 'gradient-based')
+                            H(rhoPos, thetaPos) = H(rhoPos, thetaPos) + Im(i, j);
+                        elseif strcmp(acc_mode, 'incrementation-based')
+                            H(rhoPos, thetaPos) = H(rhoPos, thetaPos) + 1;
+                        end
                     end
                 end
             end

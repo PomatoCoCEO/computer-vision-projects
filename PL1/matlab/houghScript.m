@@ -6,7 +6,7 @@ datadir     = '../data';    %the directory containing the images
 %parameters
 sigma     = 2.5;
 threshold = 0.03;
-rhoRes    = 5;
+rhoRes    = 1;
 thetaRes  = pi/180;
 nLines    = 50;
 % percentile_value = 98;
@@ -34,7 +34,11 @@ for i = 1:numel(imglist)
     %actual Hough line code function calls%  
     [Im] = EdgeFilter(img, sigma);
     % prctile(Im, percentile_value,[1,2]);
-    [H,rhoScale,thetaScale] = HoughTransform(Im, image_threshold, rhoRes, thetaRes);
+
+    % last arg = 'gradient-based' or 'incrementation-based'
+    % It defines how the hough accumulator is incremented, based on the
+    % gradient of the edge magnitude or a unitary increment respectively.
+    [H,rhoScale,thetaScale] = HoughTransform(Im, image_threshold, rhoRes, thetaRes, 'gradient-based');
     [rhos, thetas] = HoughLines(H, nLines);
     lines = houghlines(Im>image_threshold, 180*(thetaScale/pi), rhoScale, [rhos,thetas],'FillGap',5,'MinLength',10);
     
