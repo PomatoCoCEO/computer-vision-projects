@@ -33,17 +33,5 @@ function Assignment()
     fprintf("edge detection - differences: %d", sum(difference(:)));
     % std_threshold = 2; % only the magnitudes with a distance of (std_threshold = 2) 
     
-    % standard deviations from the mean will be considered for the hough filter.
-    percentile_value = 99;
 
-    hough_threshold = prctile(img_edges, percentile_value,[1,2]);% mean2(img_edges) + std_threshold* std2(img_edges);
-
-    % last arg = 'gradient-based' or 'incrementation-based'
-    % It defines how the hough accumulator is incremented, based on the
-    % gradient of the edge magnitude or a unitary increment respectively.
-    [H, rhoScale, thetaScale] = HoughTransform(img_edges, hough_threshold, 1, pi/180, 'gradient-based');
-    imshow(H);
-
-    [rhos, thetas] = HoughLines(H, 30);
-    
 end

@@ -9,13 +9,12 @@ threshold = 0.03;
 rhoRes    = 1;
 thetaRes  = pi/180;
 nLines    = 50;
-% percentile_value = 98;
-image_threshold = 0.1;
-test_no = sprintf('sigma-%.1f-edge-threshold-%.2f-rho-res-%d-theta-res-%.2fdeg-lines-%d', sigma, image_threshold, rhoRes,thetaRes * 180 / pi, nLines);
+image_threshold = 0.15;
+test_no = sprintf('old-sigma-%.1f-edge-threshold-%.2f-rho-res-%d-theta-res-%.2fdeg-lines-%d', sigma, image_threshold, rhoRes,thetaRes * 180 / pi, nLines);
 
-resultsdir  = sprintf('../results/test%s',test_no); %the directory for dumping results
+resultsdir  = sprintf('../results/test-%s',test_no); %the directory for dumping results
 mkdir(resultsdir);
-%end of parameters
+
 
 imglist = dir(sprintf('%s/*.jpg', datadir));
 
@@ -35,10 +34,8 @@ for i = 1:numel(imglist)
     [Im] = EdgeFilter(img, sigma);
     % prctile(Im, percentile_value,[1,2]);
 
-    % last arg = 'gradient-based' or 'incrementation-based'
-    % It defines how the hough accumulator is incremented, based on the
-    % gradient of the edge magnitude or a unitary increment respectively.
-    [H,rhoScale,thetaScale] = HoughTransform(Im, image_threshold, rhoRes, thetaRes, 'gradient-based');
+   
+    [H,rhoScale,thetaScale] = HoughTransform(Im, image_threshold, rhoRes, thetaRes);
     [rhos, thetas] = HoughLines(H, nLines);
     lines = houghlines(Im>image_threshold, 180*(thetaScale/pi), rhoScale, [rhos,thetas],'FillGap',5,'MinLength',10);
     

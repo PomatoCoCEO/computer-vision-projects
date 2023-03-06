@@ -1,5 +1,4 @@
 function [rhos, thetas] = HoughLines(H, nLines)
-%Your implemention here
     % firstly for the non maximum supression
     H_copy= H;
     aid_filter = ones(3,3);

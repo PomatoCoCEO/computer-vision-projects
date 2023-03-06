@@ -21,6 +21,7 @@ function [img1] = ImageFilter(img0, h)
             for j = 1:size(img_padded,2)
                 for k = 1:no_lines_filter
                     filtered_image_1(i,j) = filtered_image_1(i,j) + img_padded(i+k-1,j) * upside_down_vertical(k);
+                    % faster than built-in element-wise multiplication
                 end
                 % filtered_image_1(i,j) = sum(upside_down_vertical .* img_padded(i:i+no_lines_filter-1, j));
             end
@@ -32,8 +33,8 @@ function [img1] = ImageFilter(img0, h)
             for j = 1:width
                 for k = 1:no_columns_filter
                     filtered_image(i,j) = filtered_image(i,j) + filtered_image_1(i,j+k-1) * upside_down_horizontal(k);
+                    % faster than built-in element-wise multiplication
                 end
-
                 % filtered_image(i,j) = sum(upside_down_horizontal .* filtered_image_1(i, j:j+no_columns_filter-1));
             end
         end
@@ -46,6 +47,7 @@ function [img1] = ImageFilter(img0, h)
                 for k = 1:no_lines_filter
                     for m = 1:no_columns_filter
                         filtered_image(i,j) = filtered_image(i,j) + upside_down(k,m) * img_padded(i+k-1,j+m-1);
+                        % faster than built-in element-wise multiplication
                     end
                 end
                 % filtered_image(i,j) = sum(upside_down .* img_padded(i:i+no_lines_filter-1, j:j+no_columns_filter-1), [1,2] );

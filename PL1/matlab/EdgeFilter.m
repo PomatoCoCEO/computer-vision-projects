@@ -9,8 +9,7 @@ function [Im] = EdgeFilter(img0, sigma)
     vertical_differential = ImageFilter(smoothed_image, vertical_filter);
     horizontal_differential = ImageFilter(smoothed_image, horizontal_filter);
     gradient_magnitude = sqrt(vertical_differential .^2 + horizontal_differential .^2);
-    % gradient_before = gradient_magnitude;
-    % img1 = gradient_magnitude;
+
     % now for the non maximum supression: by definition the border pixels
     % would have zero gradient, the others would be calculated as shown
 
