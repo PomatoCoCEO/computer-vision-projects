@@ -2,7 +2,7 @@ function [pts] = HarrisCorner(img0,thresh,sigma_d,sigma_i,NMS_size)
 %Your implemention
     gauss_size =  2 * ceil(3 * sigma_d) + 1; % according to the specification provided in the statement of the first project
     gauss_filter = fspecial('gaussian', gauss_size, sigma_d);
-    hor_filter = [-1 0 1];
+    hor_filter = [-1 0 1]; % simple derivative filter
     gauss_der_hor = ImageFilter(gauss_filter, hor_filter);
     hor_derivative = ImageFilter(img0, gauss_der_hor);
     gauss_dev_vert = ImageFilter(gauss_filter, hor_filter');
@@ -38,7 +38,7 @@ function [pts] = HarrisCorner(img0,thresh,sigma_d,sigma_i,NMS_size)
     offset = floor(size_neighborhood/2) - floor(window_size/2);
     for i = 4 : size(padded_c, 1) - 3
         for j = 4 : size(padded_c, 2)-3
-            if padded_c(i,j) > c_threshold && padded_c(i,j) > max(max(padded_c(i-half_size:i+half_size, j-half_size:j+half_size) .* aid_filter))
+            if padded_c(i,j) > c_threshold && padded_c(i,j) > max(padded_c(i-half_size:i+half_size, j-half_size:j+half_size) .* aid_filter,[], [1 2])
                 pts = [pts; [i - offset,j - offset]];
             end
         end
