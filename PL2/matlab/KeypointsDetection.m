@@ -19,7 +19,7 @@ function [Pts] = KeypointsDetection(Img,Pts)
     end
 
     % scale
-    sigma = [3, 5, 7, 9, 15, 17];
+    sigma = [5,8,13,21,35,57,91]; % approximately fibonacci-like
 
     best_sigmas = zeros(size(Pts, 1), 1);
 
@@ -29,15 +29,17 @@ function [Pts] = KeypointsDetection(Img,Pts)
         y = Pts(i,1);
         x = Pts(i,2);
         for j = 1 : size(sigma,2)
-            filter_size = ceil(sigma(j));
+            filter_size = floor(sigma(j));
             offset = floor(filter_size / 2);
-            log_kernel = fspecial('log', sigma(j), filter_size);
+            log_kernel = sigma(j)^2 * fspecial('log', sigma(j), filter_size);
 
             % the log filter is symmetric, so element wise multiplication can be used
-            activation = sum(Img(y-offset:y+offset, x-offset:x+offset) .* log_kernel, [1,2]);
-            if activation > max_act
-                max_act = activation;
-                best_sigma = sigma(j);
+            try
+                activation = sum(Img(y-offset:y+offset, x-offset:x+offset) .* log_kernel, [1,2]);
+                if activation > max_act
+                    max_act = activation;
+                    best_sigma = sigma(j);
+                end
             end
         end
         best_sigmas(i) = best_sigma;
