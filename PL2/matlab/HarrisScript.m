@@ -1,19 +1,19 @@
 clear;
 
-datadir     = '../datasets/bikes';    %the directory containing the images
+datadir     = '../datasets/custom';    %the directory containing the images
 resultsdir  = '../results'; %the directory for dumping results
 
 %parameters
-sigma_d  = 1;                  % Recommended. Adjust if needed.
+sigma_d  = 2;                  % Recommended. Adjust if needed.
 sigma_i  = 2;                  % Recommended. Adjust if needed.
-Tresh_R = 0.1;                   % Set as example. Adjust if needed.
+Tresh_R = 0.35;                   % Set as example. Adjust if needed.
 NMS_size = 10;                 % Recommended. Adjust if needed.
 Patchsize  = @(sz) 2 * sqrt(2) * sz;               % Set as example. Will depends on the scale.
-Tresh_Metric = 10 ;            % Set as example. Minimum distance metric error for matching
+Tresh_Metric = 5 ;            % Set as example. Minimum distance metric error for matching
 Descriptor_type  = 'S-MOPS';   % SIMPLE -> Simple 5x5 patch ; S-MOPS -> Simplified MOPS
 Metric_type = 'SSD';           % RATIO -> Ratio test ; SSD -> Sum Square Distance
 
-Min_Query_features = 50;  % minimum number of 50 Harris points in Query image
+Min_Query_features = 0;  % minimum number of 50 Harris points in Query image
 %end of parameters
 
 %----------------------------------------------------------------------------
@@ -22,7 +22,7 @@ Min_Query_features = 50;  % minimum number of 50 Harris points in Query image
 list = dir(sprintf('%s/*.txt',datadir));
 
 % Read QUERY Image - IMAGE 1
-imglist = dir(sprintf('%s/*.ppm', datadir))
+imglist = dir(sprintf('%s/*.jpg', datadir))
 [path1, imgname1, dummy1] = fileparts(imglist(1).name);
 img1 = imread(sprintf('%s/%s', datadir, imglist(1).name));
 
@@ -71,6 +71,9 @@ if size(Dscrpt1.desc,1) > Min_Query_features
     %actual feature descritor 
     
     [Dscrpt2] = FeatureDescriptor(img2,Pts_N2,Descriptor_type,Patchsize);
+    
+    disp('......')
+    disp(size(Dscrpt2.desc))
     
     %actual feature matching
     
