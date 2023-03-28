@@ -1,5 +1,5 @@
 function KeypointPlot(Img)
-    sigma = [3, 5, 9, 21, 35, 51];
+    sigma = [5,13,21,35,57,91];
     for j = 1 : size(sigma,2)
         filter_size = ceil(sigma(j));
         offset = floor(filter_size / 2);

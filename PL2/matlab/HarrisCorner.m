@@ -28,18 +28,23 @@ function [pts] = HarrisCorner(img0,thresh,sigma_d,sigma_i,NMS_size)
             c_matrix(i,j) = det(s) - 0.1 * (trace(s))^2;
         end
     end
-    c_threshold = max(max(c_matrix)) * thresh;
+    c_threshold = max(max(c_matrix)) * thresh
 
     size_neighborhood = NMS_size;
-    padded_c = padarray(c_matrix, [floor(size_neighborhood/2) floor(size_neighborhood/2)], 0, 'both');
-    half_size = floor(size_neighborhood/2);
+    half_size_sup = floor((size_neighborhood)/2);
+    half_size_inf = floor((size_neighborhood-1)/2);
+    padded_c = padarray(c_matrix, [half_size_inf half_size_sup], 0, 'both');
+    
     aid_filter = ones(size_neighborhood);
-    aid_filter(floor(size_neighborhood/2)+1, floor(size_neighborhood/2) +1) = 0;
+    % aid_filter(half_size_inf, half_size_inf) = 0
     offset = floor(size_neighborhood/2) - floor(window_size/2);
     for i = 4 : size(padded_c, 1) - 3
         for j = 4 : size(padded_c, 2)-3
-            if padded_c(i,j) > c_threshold && padded_c(i,j) > max(padded_c(i-half_size:i+half_size, j-half_size:j+half_size) .* aid_filter,[], [1 2])
-                pts = [pts; [i - offset,j - offset]];
+            if padded_c(i,j) > c_threshold 
+                disp(padded_c(i,j))
+                if padded_c(i,j) >= max(padded_c(i-half_size_inf:i+half_size_sup, j-half_size_inf:j+half_size_sup) .* aid_filter,[], [1 2])
+                    pts = [pts; [i - offset,j - offset]];
+                end
             end
         end
     end

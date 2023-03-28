@@ -7,7 +7,7 @@ function [Match] = FeatureMatching(Dscpt1,Dscpt2,Tresh,Metric_TYPE)
     for i = 1 : size(dscpt1, 1)
         dist = zeros(1, size(dscpt2, 1));
         for j = 1 : size(dscpt2, 1)
-            dist(j) = sum((dscpt1(i) - dscpt2(j)) .^ 2, 1:ndim(dscpt1(i)));
+            dist(j) = sum((dscpt1(i) - dscpt2(j)) .^ 2, 1:ndims(dscpt1(i)));
         end
         if strcmp(Metric_TYPE,'SSD')
             [D,I] = min(dist);
@@ -24,6 +24,8 @@ function [Match] = FeatureMatching(Dscpt1,Dscpt2,Tresh,Metric_TYPE)
 
     end
     Match = matches;
+    disp("size of match")
+    size(Match)
 end
         
         

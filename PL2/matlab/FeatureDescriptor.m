@@ -12,11 +12,14 @@ function [Descriptors] = FeatureDescriptor(Img,Pts,Dscpt_type,Patch_size)
             Descriptors(i,:,:) = Img(y-offset:y+offset, x-offset, x + offset);
         end
     elseif strcmp(Dscpt_type, 'S-MOPS')
+        disp('Going through S-MOPS...');
+        disp(size(Pts.coordinates))
         coords = Pts.coordinates;
         scales = Pts.scale;
         orient = Pts.orientation;
         feature_size = 8;
         Descriptors = zeros(size(coords, 1), feature_size, feature_size);
+        disp(size(Descriptors))
         for i = 1 : size(coords,1)
             x = coords(i,2);
             y = coords(i,1);
@@ -24,10 +27,12 @@ function [Descriptors] = FeatureDescriptor(Img,Pts,Dscpt_type,Patch_size)
             patch_size = Patch_size(scale);
             orientation = orient(i);
             offset = floor(patch_size / 2);
-            region = Im(y-offset: y + offset, x-offset, x+offset);
+            region = Img(y-offset: y + offset, x-offset: x+offset);
+            
             transform = rigidtform2d(-orientation * 180 / pi, [0 0]);
+            disp(size(region));
             im_transformed= imwarp(region, transform);
-            factor = feature_size / patch_size;
+            factor = feature_size / size(im_transformed, 1);
             im_resized = imresize(im_transformed, factor);
             Descriptors(i, :,:) = im_resized;            
         end
