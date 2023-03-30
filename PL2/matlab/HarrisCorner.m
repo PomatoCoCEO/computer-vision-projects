@@ -2,11 +2,9 @@ function [pts] = HarrisCorner(img0,thresh,sigma_d,sigma_i,NMS_size)
 %Your implemention
     gauss_size =  2 * ceil(3 * sigma_d) + 1; % according to the specification provided in the statement of the first project
     gauss_filter = fspecial('gaussian', gauss_size, sigma_d);
-    hor_filter = [-1 0 1]; % simple derivative filter
-    gauss_der_hor = ImageFilter(gauss_filter, hor_filter);
+    [gauss_der_hor, gauss_der_vert] = gradient(gauss_filter); % ImageFilter(gauss_filter, hor_filter);
     hor_derivative = ImageFilter(img0, gauss_der_hor);
-    gauss_dev_vert = ImageFilter(gauss_filter, hor_filter');
-    vert_derivative = ImageFilter(img0, gauss_dev_vert);
+    vert_derivative = ImageFilter(img0, gauss_der_vert);
     Ix2 = hor_derivative .^ 2;
     Iy2 = vert_derivative .^ 2;
     Ixy = hor_derivative .* vert_derivative;
@@ -28,6 +26,9 @@ function [pts] = HarrisCorner(img0,thresh,sigma_d,sigma_i,NMS_size)
             c_matrix(i,j) = det(s) - 0.1 * (trace(s))^2;
         end
     end
+    std_vals = std(c_matrix,[],[1 2]);
+    avg_vals = std(c_matrix,[],[1 2]);
+
     c_threshold = max(max(c_matrix)) * thresh;
 
     size_neighborhood = NMS_size;
@@ -40,7 +41,7 @@ function [pts] = HarrisCorner(img0,thresh,sigma_d,sigma_i,NMS_size)
     offset = half_size_inf - floor(window_size/2);
     for i = half_size_inf : size(padded_c, 1) - half_size_sup
         for j = half_size_inf : size(padded_c, 2)-half_size_sup
-            if padded_c(i,j) > c_threshold 
+            if padded_c(i,j) > c_threshold
                 disp(padded_c(i,j))
                 if padded_c(i,j) >= max(padded_c(i-half_size_inf:i+half_size_sup, j-half_size_inf:j+half_size_sup) .* aid_filter,[], [1 2])
                     pts = [pts; [i - offset,j - offset]];
@@ -48,4 +49,6 @@ function [pts] = HarrisCorner(img0,thresh,sigma_d,sigma_i,NMS_size)
             end
         end
     end
+    fprintf('size of corners is');
+    disp(size(pts))
 end

@@ -24,11 +24,12 @@ function [Match] = FeatureMatching(Dscpt1,Dscpt2,Tresh,Metric_TYPE)
             throw(MException('Function:InvalidArgument',"Only SSD and RATIO Metric_TYPE allowed"));
     end
     % now ensuring one to one mapping
-    mapping_array = - ones(size(dscpt2, 1), 1);
+    
+    mapping_array = - ones(size(dscpt2, 1), 1); % all to -1
     size(matches)
     for i = 1 : size(matches, 1)
         el2 = matches(i, 2);
-        if mapping_array(el2) == -1
+        if mapping_array(el2) == -1 % there is no match, assign it
             mapping_array(el2) = i;
         else
             if matches(mapping_array(el2), 3) < matches(i, 3)
@@ -37,6 +38,7 @@ function [Match] = FeatureMatching(Dscpt1,Dscpt2,Tresh,Metric_TYPE)
         end
     end
     matches = matches(mapping_array(mapping_array ~= -1), :);
+    
     Match = matches;
 end
         

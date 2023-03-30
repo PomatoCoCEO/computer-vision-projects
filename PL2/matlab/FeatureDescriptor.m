@@ -9,9 +9,10 @@ function [Descriptors] = FeatureDescriptor(Img,Pts,Dscpt_type,Patch_size)
         for i = 1 : size(coords, 1)
             x = coords(i,2);
             y = coords(i,1);
-            Descriptors(i,:,:) = Img(y-offset:y+offset, x-offset, x + offset);
+            Descriptors(i,:,:) = normalize(Img(y-offset:y+offset, (x-offset): (x + offset)));
         end
     elseif strcmp(Dscpt_type, 'S-MOPS')
+        rot_matrix = @(angle) [cos(angle) -sin(angle) 0; sin(angle) cos(angle) 0; 0 0 1];
         disp('Going through S-MOPS...');
         disp(size(Pts.coordinates))
         coords = Pts.coordinates;
@@ -24,17 +25,27 @@ function [Descriptors] = FeatureDescriptor(Img,Pts,Dscpt_type,Patch_size)
             x = coords(i,2);
             y = coords(i,1);
             scale = scales(i);
-            patch_size = Patch_size(scale);
+            patch_size = max(9,Patch_size(scale));
+            lim_inf = floor((patch_size-1)/2);
+            lim_sup = floor((patch_size)/2);
             orientation = orient(i);
-            offset = floor(patch_size / 2);
-            region = Img(y-offset: y + offset, x-offset: x+offset);
-            
-            transform = rigidtform2d(-orientation * 180 / pi, [0 0]);
+            offset_inf = floor((patch_size-1) / 2);
+            offset_sup = floor((patch_size) / 2);
+            region = Img(y-offset_inf: y + offset_sup, x-offset_inf: x+offset_sup);
+            % transform = rigidtform2d(orientation * 180 / pi, [0 0]);
+            transform = affine2d(rot_matrix(-orientation));
             disp(size(region));
             im_transformed= imwarp(region, transform);
-            factor = feature_size / size(im_transformed, 1);
-            im_resized = imresize(im_transformed, factor);
-            Descriptors(i, :,:) = im_resized;            
+            center_rot = floor(size(im_transformed,1) / 2);
+            disp([center_rot lim_inf lim_sup])
+            feature_extract = im_transformed((center_rot - lim_inf):(center_rot + lim_sup),(center_rot - lim_inf):(center_rot + lim_sup));
+           
+            factor = feature_size / size(feature_extract, 1);
+            
+            im_resized = imresize(feature_extract, factor);
+            
+
+            Descriptors(i, :,:) = normalize(im_resized);            
         end
     end
     temp.desc = Descriptors;
