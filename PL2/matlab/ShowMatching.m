@@ -18,16 +18,16 @@ initial_points = [-offset_inf -offset_inf; offset_sup -offset_inf; offset_sup of
 sq_pts = initial_points';
 
 Descs = [Dscpt1 Dscpt2];
-imgs = cat(3, img1, img2);
+imgs = {img1, img2};% cat(3, img1, img2);
 
 size(Descs(1).coordinates)
 
 figure()
 for img_no = 1:2
     subplot(2,2,img_no);
-    img = imgs(:,:,img_no);
+    img = imgs{img_no};
     width = size(img,2);
-    imshow(imgs(:,:,img_no)); hold on;
+    imshow(img); hold on;
     for pos = 1:size(Descs(img_no).coordinates, 1)
         % x, y, width, height
         

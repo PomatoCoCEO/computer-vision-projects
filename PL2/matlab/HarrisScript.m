@@ -1,12 +1,13 @@
 clear;
 
-datadir     = '../datasets/custom';    %the directory containing the images
+datadir     = '../datasets/bikes';    %the directory containing the images
 resultsdir  = '../results'; %the directory for dumping results
+image_format = 'ppm'
 
 %parameters
 sigma_d  = 2;                  % Recommended. Adjust if needed.
 sigma_i  = 2;                  % Recommended. Adjust if needed.
-Tresh_R = 0.35;                   % Set as example. Adjust if needed.
+Tresh_R = 0.2;                   % Set as example. Adjust if needed.
 NMS_size = 10;                 % Recommended. Adjust if needed.
 Patchsize  = @(sz) 2 * sqrt(2) * sz;               % Set as example. Will depends on the scale.
 Tresh_Metric = 5 ;            % Set as example. Minimum distance metric error for matching
@@ -19,10 +20,10 @@ Min_Query_features = 0;  % minimum number of 50 Harris points in Query image
 %----------------------------------------------------------------------------
 
 % Read list of Files with Homography matrices
-list = dir(sprintf('%s/*.txt',datadir));
+list = dir(sprintf('%s/*.%s',datadir, image_format));
 
 % Read QUERY Image - IMAGE 1
-imglist = dir(sprintf('%s/*.jpg', datadir))
+imglist = dir(sprintf('%s/*.ppm', datadir));
 [path1, imgname1, dummy1] = fileparts(imglist(1).name);
 img1 = imread(sprintf('%s/%s', datadir, imglist(1).name));
 

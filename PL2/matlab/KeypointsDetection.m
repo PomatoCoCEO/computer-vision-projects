@@ -19,7 +19,7 @@ function [Pts] = KeypointsDetection(Img,Pts)
     end
 
     % scale
-    sigma = [3,5,8,13,21,35,57,91]; % approximately fibonacci-like
+    sigma = [3,5,8,11,13,17,21,28,35,46,57,70,91]; % approximately fibonacci-like
 
     patch_size = @(sz) ceil(sz * 2 * sqrt(sz));
 
