@@ -30,7 +30,6 @@ for img_no = 1:2
     size(img)
     width = size(img,2);
     imshow(img); hold on;
-    txt = input('Boo');
     for pos = 1:size(Descs(img_no).coordinates, 1)
         % x, y, width, height
         

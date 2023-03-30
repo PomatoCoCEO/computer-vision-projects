@@ -1,16 +1,16 @@
 clear;
 
-datadir     = '../datasets/graf';    %the directory containing the images
+datadir     = '../datasets/bikes';    %the directory containing the images
 resultsdir  = '../results'; %the directory for dumping results
 image_format = 'ppm';
 
 %parameters
-sigma_d  = 1;                  % Recommended. Adjust if needed.
+sigma_d  = 10;                  % Recommended. Adjust if needed.
 sigma_i  = 2;                  % Recommended. Adjust if needed.
-Tresh_R = 0.5;                   % Set as example. Adjust if needed.
+Tresh_R = 0.02;                   % Set as example. Adjust if needed.
 NMS_size = 7;                 % Recommended. Adjust if needed.
 Patchsize  = @(sz) 2 * sqrt(2) * sz;               % Set as example. Will depends on the scale.
-Tresh_Metric = 0.6;            % Set as example. Minimum distance metric error for matching
+Tresh_Metric = 2.5;            % Set as example. Minimum distance metric error for matching
 Descriptor_type  = 'Simple';   % SIMPLE -> Simple 5x5 patch ; S-MOPS -> Simplified MOPS
 Metric_type = 'SSD';           % RATIO -> Ratio test ; SSD -> Sum Square Distance
 
@@ -19,11 +19,11 @@ Min_Query_features = 0;  % minimum number of 50 Harris points in Query image
 
 %----------------------------------------------------------------------------
 
-% Read list of Files with Homography matrices
+ % Read list of Files with Homography matrices
 list = dir(sprintf('%s/*.%s',datadir, image_format));
 
 % Read QUERY Image - IMAGE 1
-imglist = dir(sprintf('%s/*.%s', datadir, image_format));
+imglist = dir(sprintf('%s/*.ppm', datadir));
 [path1, imgname1, dummy1] = fileparts(imglist(1).name);
 img1 = imread(sprintf('%s/%s', datadir, imglist(1).name));
 
@@ -51,16 +51,16 @@ if size(Dscrpt1.desc,1) > Min_Query_features
 
 % Performs Feature Matching between MASTER image and a set of SLAVE images
     
-  for i = 2:2% numel(imglist)
+  for i = 2:numel(imglist)
     
     % Read TEST images %
     [path2, imgname2, dummy2] = fileparts(imglist(i).name);
-    img2 = imread(sprintf('%s/%s', datadir, imglist(1).name));
+    img2 = imread(sprintf('%s/%s', datadir, imglist(i).name));
     
-    rot_matrix = @(angle) [cos(angle) -sin(angle) 0; sin(angle) cos(angle) 0; 0 0 1];
-    t_matrix = @(dx, dy) [1 0 dx; 0 1 dy; 0 0 1]
-    transform = affine2d(rot_matrix(0.01));
-    img2= imwarp(img2, transform);
+    %rot_matrix = @(angle) [cos(angle) -sin(angle) 0; sin(angle) cos(angle) 0; 0 0 1];
+    %t_matrix = @(dx, dy) [1 0 dx; 0 1 dy; 0 0 1]
+    %transform = affine2d(rot_matrix(0.01));
+    %img2= imwarp(img2, transform);
     %img2 = imtranslate(img2,[50, 0],'FillValues',255);
 
     if (ndims(img2) == 3)
