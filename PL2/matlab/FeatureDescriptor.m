@@ -21,7 +21,7 @@ function [Descriptors] = FeatureDescriptor(Img,Pts,Dscpt_type,Patch_size)
         feature_size = 8;
         Descriptors = zeros(size(coords, 1), feature_size, feature_size);
         % disp(size(Descriptors))
-        window_size = @(sigma) sigma;%  2 * ceil(3 * sigma) + 1;
+        window_size = @(sigma) 2 * ceil(3 * sigma) + 1;
         for i = 1 : size(coords,1)
             x = coords(i,2);
             y = coords(i,1);
@@ -38,10 +38,9 @@ function [Descriptors] = FeatureDescriptor(Img,Pts,Dscpt_type,Patch_size)
                 continue
             end    
                 transform = affine2d(rot_matrix(-orientation)); % rotation matrix: contrary to the orientation to achieve canonical orientation
-                disp(size(region));
+           
                 im_transformed= imwarp(region, transform); % rotation applied to the region
                 center_rot = floor(size(im_transformed,1) / 2); % finding the center for cropping the relevant part
-                disp([center_rot lim_inf lim_sup])
                 feature_extract = im_transformed((center_rot - lim_inf):(center_rot + lim_sup),(center_rot - lim_inf):(center_rot + lim_sup));
             
                 factor = feature_size / size(feature_extract, 1);

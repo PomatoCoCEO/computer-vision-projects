@@ -1,17 +1,18 @@
 clear;
 
-datadir     = '../datasets/yosemite';    %the directory containing the images
+image_name = 'yosemite';
+datadir     = sprintf('../datasets/%s', image_name);    %the directory containing the images
 resultsdir  = '../results'; %the directory for dumping results
 image_format = 'jpg';
 
 %parameters
-sigma_d  = 10;                  % Recommended. Adjust if needed.
+sigma_d  = 5;                  % Recommended. Adjust if needed.
 sigma_i  = 2;                  % Recommended. Adjust if needed.
 Tresh_R = 0.05;                   % Set as example. Adjust if needed.
 NMS_size = 7;                 % Recommended. Adjust if needed.
 Patchsize  = @(sz) 2 * sqrt(2) * sz;               % Set as example. Will depends on the scale.
-Tresh_Metric = 2.5;            % Set as example. Minimum distance metric error for matching
-Descriptor_type  = 'Simple';   % SIMPLE -> Simple 5x5 patch ; S-MOPS -> Simplified MOPS
+Tresh_Metric = 0.5;            % Set as example. Minimum distance metric error for matching
+Descriptor_type  = 'S-MOPS';   % SIMPLE -> Simple 5x5 patch ; S-MOPS -> Simplified MOPS
 Metric_type = 'RATIO';           % RATIO -> Ratio test ; SSD -> Sum Square Distance
 
 Min_Query_features = 0;  % minimum number of 50 Harris points in Query image
@@ -51,7 +52,7 @@ if size(Dscrpt1.desc,1) > Min_Query_features
 
 % Performs Feature Matching between MASTER image and a set of SLAVE images
     
-  for i = 2:2% numel(imglist)
+  for i = 2: numel(imglist)
     
     % Read TEST images %
     [path2, imgname2, dummy2] = fileparts(imglist(i).name);
@@ -82,8 +83,9 @@ if size(Dscrpt1.desc,1) > Min_Query_features
     MatchList = FeatureMatching(Dscrpt1,Dscrpt2,Tresh_Metric,Metric_type);
     
     %Show matched keypoints and keypoint's feature patches
+    string_results = sprintf("%s_%d_sigma_d_%.1f_sigma_i_%.1f_TreshR_%.2f_NMS_size_%.1f_Tresh_%.2f_Descriptor_%s_Metric_%s",image_name,i,sigma_d,sigma_i,Tresh_R,NMS_size,Tresh_Metric,Descriptor_type,Metric_type);
     
-    ShowMatching(MatchList,img1,img2,Dscrpt1,Dscrpt2)
+    ShowMatching(MatchList,img1,img2,Dscrpt1,Dscrpt2, string_results)
     
   end
 end

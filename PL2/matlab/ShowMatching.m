@@ -1,4 +1,4 @@
-function ShowMatching(MatchList,img1,img2,Dscpt1,Dscpt2)
+function ShowMatching(MatchList,img1,img2,Dscpt1,Dscpt2, name_files)
 % Show all matches by ploting the line that connects both matched keypoints. 
 % Create a composed image with the original and query image to plot the connected points.
 % Allow also the possibility to visualise the 8x8 (or 5x5) feature patches
@@ -24,10 +24,9 @@ size(Descs(1).coordinates)
 
 figure()
 for img_no = 1:2
-    subplot(2,2,img_no);
+    subplot(1,2,img_no);
     img = imgs{img_no};
     CornerPlot(img, Descs(img_no));
-
 end
 % resizing for the same height
 lines_img1 = size(img1,1);
@@ -47,7 +46,11 @@ else
     factor1 = lines_img2/lines_img1;
 end
 % second: put the images side by side, using a scale
-subplot(2,1,2);
+% subplot(2,1,2);
+file_name = sprintf("../results/corners_%s.png", name_files);
+saveas(gcf, file_name);
+
+figure();
 img_tot = [img1 img2];
 
 colormap('gray');
@@ -64,6 +67,8 @@ for i = 1 : size(MatchList, 1)
     plot([x1 x2], [y1 y2], 'Color', colorLine, 'LineWidth', 1); hold on;
 end
 axis('off');
+file_name = sprintf("../results/matches_%s.png", name_files);
+saveas(gcf,file_name);
 % third: plot the lines between the squares
 
 

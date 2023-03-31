@@ -34,7 +34,7 @@ function [Pts] = KeypointsDetection(Img,Pts)
             filter_size = window_size(sigma(j));
             offset_inf = floor((filter_size-1) / 2);
             offset_sup = floor(filter_size/2);
-            log_kernel =  fspecial('log', window_size(sigma(j)), sigma(j));
+            log_kernel = sigma(j)^2* fspecial('log', window_size(sigma(j)), sigma(j));
             % patch_size(sigma(j))^2 * 
 
             % the log filter is symmetric, so element wise multiplication can be used

@@ -47,6 +47,4 @@ function [pts] = HarrisCorner(img0,thresh,sigma_d,sigma_i,NMS_size)
             end
         end
     end
-    fprintf('size of corners is');
-    disp(size(pts))
 end
