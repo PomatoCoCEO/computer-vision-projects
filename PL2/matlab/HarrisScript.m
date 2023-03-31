@@ -10,9 +10,9 @@ sigma_i  = 2;                  % Recommended. Adjust if needed.
 Tresh_R = 0.05;                   % Set as example. Adjust if needed.
 NMS_size = 7;                 % Recommended. Adjust if needed.
 Patchsize  = @(sz) 2 * sqrt(2) * sz;               % Set as example. Will depends on the scale.
-Tresh_Metric = 0.25;            % Set as example. Minimum distance metric error for matching
-Descriptor_type  = 'S-MOPS';   % SIMPLE -> Simple 5x5 patch ; S-MOPS -> Simplified MOPS
-Metric_type = 'SSD';           % RATIO -> Ratio test ; SSD -> Sum Square Distance
+Tresh_Metric = 2.5;            % Set as example. Minimum distance metric error for matching
+Descriptor_type  = 'Simple';   % SIMPLE -> Simple 5x5 patch ; S-MOPS -> Simplified MOPS
+Metric_type = 'RATIO';           % RATIO -> Ratio test ; SSD -> Sum Square Distance
 
 Min_Query_features = 0;  % minimum number of 50 Harris points in Query image
 %end of parameters
