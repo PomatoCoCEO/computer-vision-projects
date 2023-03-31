@@ -26,32 +26,8 @@ figure()
 for img_no = 1:2
     subplot(2,2,img_no);
     img = imgs{img_no};
-    disp("size of image ");
-    size(img)
-    width = size(img,2);
-    imshow(img); hold on;
-    for pos = 1:size(Descs(img_no).coordinates, 1)
-        % x, y, width, height
-        
-        y = Descs(img_no).coordinates(pos,1);
-        x = Descs(img_no).coordinates(pos,2);
-        
-        % use polylines
-        % initial_points = []
-        orient = Descs(img_no).orientation(pos);
-        rotmat = rot_matrix(orient);
-        scale = Descs(img_no).scale(pos);
-        new_pts = [rotmat * sq_pts(:,1), rotmat * sq_pts(:,2), rotmat * sq_pts(:,3), rotmat * sq_pts(:,4)];
-        new_pts = scale * new_pts;
-        for i = 1: size(new_pts, 2)
-            new_pts(:,i) = new_pts(:,i) + [x;y];
-        end
-        
-        sq = polyshape(new_pts');
-        plot(sq, 'FaceAlpha', 0,'EdgeColor',[0 1 0]); hold on;
-        plot(x,y,'r*'); hold on;
-        % r=rectangle('Position',[x-offset, y-offset, size_desc*scales1(pos), size_desc*scales1(pos)], 'Rotation', orientation * (180 / pi))
-    end
+    CornerPlot(img, Descs(img_no));
+
 end
 % resizing for the same height
 lines_img1 = size(img1,1);
@@ -74,7 +50,7 @@ end
 subplot(2,1,2);
 img_tot = [img1 img2];
 
-% colormap('gray');
+colormap('gray');
 imagesc(img_tot); hold on;
 
 for i = 1 : size(MatchList, 1)

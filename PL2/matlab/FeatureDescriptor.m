@@ -9,7 +9,7 @@ function [Descriptors] = FeatureDescriptor(Img,Pts,Dscpt_type,Patch_size)
         for i = 1 : size(coords, 1)
             x = coords(i,2);
             y = coords(i,1);
-            Descriptors(i,:,:) = normalize(Img(y-offset:y+offset, (x-offset): (x + offset)));
+            Descriptors(i,:,:) = Img(y-offset:y+offset, (x-offset): (x + offset));
         end
     elseif strcmp(Dscpt_type, 'S-MOPS')
         rot_matrix = @(angle) [cos(angle) -sin(angle) 0; sin(angle) cos(angle) 0; 0 0 1];
@@ -20,32 +20,34 @@ function [Descriptors] = FeatureDescriptor(Img,Pts,Dscpt_type,Patch_size)
         orient = Pts.orientation;
         feature_size = 8;
         Descriptors = zeros(size(coords, 1), feature_size, feature_size);
-        disp(size(Descriptors))
+        % disp(size(Descriptors))
+        window_size = @(sigma) sigma;%  2 * ceil(3 * sigma) + 1;
         for i = 1 : size(coords,1)
             x = coords(i,2);
             y = coords(i,1);
             scale = scales(i);
-            patch_size = max(9,Patch_size(scale));
+            patch_size = max(4,Patch_size(window_size(scale))); % calculating patch size
+
             lim_inf = floor((patch_size-1)/2);
             lim_sup = floor((patch_size)/2);
             orientation = orient(i);
-            offset_inf = floor((patch_size-1) / 2);
-            offset_sup = floor((patch_size) / 2);
-            region = Img(y-offset_inf: y + offset_sup, x-offset_inf: x+offset_sup);
-            % transform = rigidtform2d(orientation * 180 / pi, [0 0]);
-            transform = affine2d(rot_matrix(-orientation));
-            disp(size(region));
-            im_transformed= imwarp(region, transform);
-            center_rot = floor(size(im_transformed,1) / 2);
-            disp([center_rot lim_inf lim_sup])
-            feature_extract = im_transformed((center_rot - lim_inf):(center_rot + lim_sup),(center_rot - lim_inf):(center_rot + lim_sup));
-           
-            factor = feature_size / size(feature_extract, 1);
-            
-            im_resized = imresize(feature_extract, factor);
-            
 
-            Descriptors(i, :,:) = normalize(im_resized);            
+            try
+                region = Img(y-lim_inf: y + lim_sup, x-lim_inf: x+lim_sup); % region to consider
+            catch ME % if out of bounds descriptor will not be computed
+                continue
+            end    
+                transform = affine2d(rot_matrix(-orientation)); % rotation matrix: contrary to the orientation to achieve canonical orientation
+                disp(size(region));
+                im_transformed= imwarp(region, transform); % rotation applied to the region
+                center_rot = floor(size(im_transformed,1) / 2); % finding the center for cropping the relevant part
+                disp([center_rot lim_inf lim_sup])
+                feature_extract = im_transformed((center_rot - lim_inf):(center_rot + lim_sup),(center_rot - lim_inf):(center_rot + lim_sup));
+            
+                factor = feature_size / size(feature_extract, 1);
+                
+                im_resized = imresize(feature_extract, factor);
+                Descriptors(i, :,:) = normalize(im_resized);
         end
     end
     temp.desc = Descriptors;

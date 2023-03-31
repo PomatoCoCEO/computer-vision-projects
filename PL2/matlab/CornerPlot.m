@@ -17,9 +17,9 @@ function CornerPlot(img, keypoints)
     % figure;
     gray_a = img;
     % imshow(gray_a / (max(max(gray_a) * 255)));
-    figure();
+    % figure();
     % imshow(img); % hold on;
-    imshow(uint8(img)); hold on;
+    imshow(img); hold on;
     for pos = 1:size(coords,1)
         % x, y, width, height
         
@@ -39,6 +39,7 @@ function CornerPlot(img, keypoints)
         
         sq = polyshape(new_pts');
         plot(sq, 'FaceAlpha', 0,'EdgeColor',[0 1 0]); hold on;
+        plot(x,y,'r+'); hold on;
         % plot(x,y,'r*'); hold on;
         % r=rectangle('Position',[x-offset, y-offset, size_desc*scales1(pos), size_desc*scales1(pos)], 'Rotation', orientation * (180 / pi))
     end

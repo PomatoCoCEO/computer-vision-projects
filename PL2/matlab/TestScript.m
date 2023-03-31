@@ -2,7 +2,7 @@ a = imread('../datasets/graf/img1.ppm');
 
 gray_a= double(rgb2gray(a))/255;
 
-hc = HarrisCorner(gray_a, 0.5, 1,2, 7);
+hc = HarrisCorner(gray_a, 0.02, 1,2, 7);
 
 ys = hc(:,1);
 xs=  hc(:,2);

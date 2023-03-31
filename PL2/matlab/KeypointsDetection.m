@@ -21,7 +21,7 @@ function [Pts] = KeypointsDetection(Img,Pts)
     % scale
     sigma = [0.25,0.5,1,1.5,2,3,5,8,11]; % approximately fibonacci-like
 
-    patch_size = @(sz) 2 * ceil(3 * 2 * sqrt(2) * sz) + 1;
+    window_size = @(sz) 2 * ceil(3 * sz) + 1;
 
     best_sigmas = zeros(size(Pts, 1), 1);
 
@@ -31,10 +31,10 @@ function [Pts] = KeypointsDetection(Img,Pts)
         y = Pts(i,1);
         x = Pts(i,2);
         for j = 1 : size(sigma,2)
-            filter_size = ceil(patch_size(sigma(j)));
+            filter_size = window_size(sigma(j));
             offset_inf = floor((filter_size-1) / 2);
             offset_sup = floor(filter_size/2);
-            log_kernel = fspecial('log', patch_size(sigma(j)), filter_size);
+            log_kernel =  fspecial('log', window_size(sigma(j)), sigma(j));
             % patch_size(sigma(j))^2 * 
 
             % the log filter is symmetric, so element wise multiplication can be used

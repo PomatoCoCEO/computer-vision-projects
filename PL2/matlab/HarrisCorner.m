@@ -26,8 +26,6 @@ function [pts] = HarrisCorner(img0,thresh,sigma_d,sigma_i,NMS_size)
             c_matrix(i,j) = det(s) - 0.1 * (trace(s))^2;
         end
     end
-    std_vals = std(c_matrix,[],[1 2]);
-    avg_vals = std(c_matrix,[],[1 2]);
 
     c_threshold = max(max(c_matrix)) * thresh;
 
