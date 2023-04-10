@@ -1,18 +1,18 @@
 clear;
 
-image_name = 'yosemite';
+image_name = 'leuven';
 datadir     = sprintf('../datasets/%s', image_name);    %the directory containing the images
 resultsdir  = '../results'; %the directory for dumping results
-image_format = 'jpg';
+image_format = 'ppm';
 
 %parameters
-sigma_d  = 5;                  % Recommended. Adjust if needed.
+sigma_d  = 3;                  % Recommended. Adjust if needed.
 sigma_i  = 2;                  % Recommended. Adjust if needed.
 Tresh_R = 0.05;                   % Set as example. Adjust if needed.
 NMS_size = 7;                 % Recommended. Adjust if needed.
 Patchsize  = @(sz) 2 * sqrt(2) * sz;               % Set as example. Will depends on the scale.
 Tresh_Metric = 0.5;            % Set as example. Minimum distance metric error for matching
-Descriptor_type  = 'S-MOPS';   % SIMPLE -> Simple 5x5 patch ; S-MOPS -> Simplified MOPS
+Descriptor_type  = 'Simple';   % SIMPLE -> Simple 5x5 patch ; S-MOPS -> Simplified MOPS
 Metric_type = 'RATIO';           % RATIO -> Ratio test ; SSD -> Sum Square Distance
 
 Min_Query_features = 0;  % minimum number of 50 Harris points in Query image
