@@ -3,6 +3,8 @@
 *.png
 *.asv
 *.mat
-
+*.jpg
+*.ppm
+*.bmp
 
 
