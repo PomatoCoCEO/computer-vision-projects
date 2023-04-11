@@ -4,7 +4,7 @@ function [ K, R, t ] = decomposeEXP(P)
     % to get the center we do
     A = P(1:3, 1:3);
     b = P(:,4);
-    C = -A\b;
+    % C = -A\b;
     epsilon =1;
     third_col = A(:,3);
     rho = epsilon / norm(third_col);

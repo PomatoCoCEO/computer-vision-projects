@@ -3,9 +3,12 @@ function [ K, R, C ] = decomposeQR(P)
     % To solve Pc = 0 we use SVD(M) and choose
     % the singular vector corresponding to the 
     % smallest singular value of V
-    [~, ~, v] = svd(P);
-    C = v(:, end);
+    [~, ~, v] = svd(P');
+    C = v(:, end); % 3-element column vector - matrix was transposed so that the vectors were of 3 elements
     
     s = P(:, 1:3);
-    [K, R] = qr(s);
+    s_minus_1 = inv(s);
+    [K_minus_1, R_minus_1] = qr(s_minus_1);
+    K = inv(K_minus_1);
+    R = inv(R_minus_1);
 end
