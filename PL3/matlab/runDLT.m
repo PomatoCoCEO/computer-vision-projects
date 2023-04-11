@@ -13,14 +13,7 @@ denormalized_camera = T \ P_normalized * U
 
 %factorize camera matrix in to K, R and t
 
-% To solve Pc = 0 we use SVD(M) and choose
-% the singular vector corresponding to the 
-% smallest singular value of V
-[~, ~, v] = svd(denormalized_camera);
-center = v(:, end);
-
-s = denormalized_camera(:, 1:3);
-[q, r] = qr(s);
+[K, R, C] = decomposeQR(denormalized_camera)
 
 %compute reprojection error
 
