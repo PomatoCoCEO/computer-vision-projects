@@ -8,7 +8,6 @@ function [P] = dlt(xy, XYZ)
         ite = ite + 2;
     end
     A
-    [U, S, V] = svd(A);
-
-    P = reshape(V(:,end), [4, 3])';
+    [U, S, V] = svd(A)
+    P = [V(end, 1:4); V(end, 5:8); V(end, 9:12)]
 end
