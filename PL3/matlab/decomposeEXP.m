@@ -10,7 +10,7 @@ function [ K, R, t ] = decomposeEXP(P)
     rho = epsilon / norm(third_col);
     r3 = rho * A(:,3);
     u0 = rho ^ 2 * (A(:,1)' * A(:,3));
-    v0 = rho ^2 * (A(:,2)' * A(:,3));
+    v0 = rho ^ 2 * (A(:,2)' * A(:,3));
     % sin theta is always greater than 0 , since it is in the neighborhood
     % of pi/2
     epsilon_u = 1;
@@ -26,9 +26,9 @@ function [ K, R, t ] = decomposeEXP(P)
     r2 = cross(r3, r1);
     R = [r1 r2 r3];
 
-    t_z = b(3);
-    t_y = (b(2) - v0*t_z) * sin_theta / beta;
-    t_x = (b(1) + alpha * (cos_theta / sin_theta) * t_y - u0 * t_z) / alpha;
+    t_z = b(3) / rho;
+    t_y = (b(2) - v0*t_z) * sin_theta / (beta * rho);
+    t_x = (b(1) + alpha * (cos_theta / sin_theta) * t_y - u0 * t_z) / (alpha* rho);
     t = [t_x; t_y; t_z];
 
     K = P * pinv([R t]);
