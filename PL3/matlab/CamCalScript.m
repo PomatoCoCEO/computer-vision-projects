@@ -20,19 +20,23 @@ D_type = 'QR';
 %point.
 %You don't have to do this all the time, just store the resulting xy and
 %XYZ matrices and use them as input for your algorithms.
-[xy XYZ] = getpoints(IMG_NAME);
+% [xy XYZ] = getpoints(IMG_NAME);
+load("../data/coords.mat");
 
 % === Task 2 DLT algorithm ===
 
-%[K, R, t, error] = runDLT(xy, XYZ, D_type);
+[K, R, t, error] = runDLT(xy, XYZ, D_type);
+disp(error)
+
 
 % === Task 3 Gold algorithm ===
 
-%[K, R, t, error] = runGold(xy, XYZ, D_type);
+[K, R, t, error] = runGold(xy, XYZ, D_type);
+disp(error)
 
 % === Task 4 Gold algorithm with radial distortion estimation ===
 
-%[K, R, t, Kd, error] = runGoldRadial(xy, XYZ, D_type);
+[K, R, t, Kd, error] = runGoldRadial(xy, XYZ, D_type, [width/2; height/2; 1]);
 
 % === Bonus: Undistort input Image ===
 

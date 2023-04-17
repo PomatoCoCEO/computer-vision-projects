@@ -1,5 +1,5 @@
-function f = fminGoldRadial(p, xyn, XYZn, center_coords)
-% this assumes xy, XYZ and center_coords are normalized
+function f = fminGRParameterized(p, xyn, XYZn, center_coords)
+
 %reassemble P
 P = [p(1:4);p(5:8);p(9:12)];
 k = p(13:14);
@@ -16,5 +16,5 @@ for i = 1 : size(xy, 1)
 end
 
 %compute cost function value
-f = sq_error;
+f = 0;
 end
