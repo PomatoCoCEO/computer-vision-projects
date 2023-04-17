@@ -12,8 +12,8 @@ factor2d = mean_distance_2d / sqrt(2);
 factor3d = mean_distance_3d / sqrt(3);
 
 %create T and U transformation matrices
-T = inv([factor2d 0 xy_centroid(1); 0  factor2d xy_centroid(2); 0 0 1]);
-U = inv([factor3d 0 0 XYZ_centroid(1); 0 factor3d 0 XYZ_centroid(2); 0 0 factor3d XYZ_centroid(3); 0 0 0 1]);
+T = [factor2d 0 xy_centroid(1); 0  factor2d xy_centroid(2); 0 0 1];
+U = [factor3d 0 0 XYZ_centroid(1); 0 factor3d 0 XYZ_centroid(2); 0 0 factor3d XYZ_centroid(3); 0 0 0 1];
 
 
 %and normalize the points according to the transformations
