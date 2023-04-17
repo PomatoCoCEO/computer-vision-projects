@@ -15,7 +15,6 @@ factor3d = mean_distance_3d / sqrt(3);
 T = [factor2d 0 xy_centroid(1); 0  factor2d xy_centroid(2); 0 0 1];
 U = [factor3d 0 0 XYZ_centroid(1); 0 factor3d 0 XYZ_centroid(2); 0 0 factor3d XYZ_centroid(3); 0 0 0 1];
 
-
 %and normalize the points according to the transformations
 xyn = ones([3, size(xy,2)]);
 xyn(1:2,:) = xy;
@@ -28,5 +27,7 @@ for i = 1:size(xy, 2)
     xyn(:,i) = T \ xyn(:,i);
     XYZn(:,i) = U \ XYZn(:,i);
 end
+T = inv(T);
+U = inv(U);
 
 end

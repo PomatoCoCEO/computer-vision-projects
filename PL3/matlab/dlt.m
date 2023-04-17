@@ -3,11 +3,14 @@ function [P] = dlt(xy, XYZ)
     A = [];
     ite = 1
     for i = 1 : size(xy, 2)
-        A(ite, :) = [0.5*XYZ(:,i)', zeros(1, 4), -xy(1, i) * XYZ(:,i)'];
-        A(ite + 1, :) = [zeros(1, 4), 0.5*XYZ(:,i)', -xy(2, i) * XYZ(:,i)'];
+        A(ite, :) = [XYZ(:,i)', zeros(1, 4), -xy(1, i) * XYZ(:,i)'];
+        A(ite + 1, :) = [zeros(1, 4), XYZ(:,i)', -xy(2, i) * XYZ(:,i)'];
         ite = ite + 2;
     end
     A
+    size(A)
     [U, S, V] = svd(A)
-    P = [V(end, 1:4); V(end, 5:8); V(end, 9:12)]
+    P = [V(1:4, end) V(5:8, end) V(9:12, end)]';
+    disp(A*V(:,end))
+    disp(A*P(:))
 end

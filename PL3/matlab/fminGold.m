@@ -1,10 +1,11 @@
-function f = fminGold(p, xy, XYZ, w)
+function f = fminGold(p, xy, XYZ)
 
 %reassemble P
 P = [p(1:4);p(5:8);p(9:12)];
 
-%compute squared geometric error
+sq_error = sqError(xy, XYZ, P);
+
 
 %compute cost function value
-f = 0;
+f = sq_error;
 end

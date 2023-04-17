@@ -13,7 +13,7 @@ Kd= [0 0];
 %minimize geometric error
 pn = [Pn(1,:) Pn(2,:) Pn(3,:) Kd];
 for i=1:20
-    [pn] = fminsearch(@fminGoldRadial, pn, [], xy_normalized, XYZ_normalized);
+    [pn] = fminsearch(@fminGoldRadial, pn, xy_normalized, XYZ_normalized);
 end
 
 %denormalize camera matrix
