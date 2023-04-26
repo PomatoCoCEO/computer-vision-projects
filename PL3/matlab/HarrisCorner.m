@@ -9,10 +9,10 @@ function [pts] = HarrisCorner(img0,thresh,sigma_d,sigma_i,NMS_size)
     Ix2 = hor_derivative .^ 2;
     Iy2 = vert_derivative .^ 2;
     Ixy = hor_derivative .* vert_derivative;
-    fprintf('IX2 sum: %f', sum(sum(Ix2)))
+    % fprintf('IX2 sum: %f', sum(sum(Ix2)))
 
     window_size = 2*ceil(3*sigma_i) + 1;
-    window = fspecial('gaussian', window_size, sigma_i)
+    window = fspecial('gaussian', window_size, sigma_i);
 
     harris_matrix = zeros(size(img0,1)-window_size+1, size(img0,2)-window_size+1, 2,2);
     c_matrix = zeros(size(img0,1)-window_size+1, size(img0,2)-window_size+1);

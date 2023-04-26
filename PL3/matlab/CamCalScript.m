@@ -3,13 +3,14 @@
 close all;
 
 IMG_NAME = '../images/barrel.jpg';
-img_I = imread(IMG_NAME);
+img_I = double(imread(IMG_NAME)) / 255;
+% input("Enter to continue");
 image(img_I);
 %axis off
 axis image
 
 % Decomposition Approach
-D_type = 'EXP';
+D_type = 'QR';
 %D_type = 'EXP';
 
 %This function displays the calibration image and allows the user to click
@@ -21,7 +22,23 @@ D_type = 'EXP';
 %You don't have to do this all the time, just store the resulting xy and
 %XYZ matrices and use them as input for your algorithms.
 %[xy XYZ] = getpoints(IMG_NAME);
-load("distorted.mat");
+try 
+    % tries to load the prerecorded points. if not present will ask for
+    % input after corner determination
+    load("../data/distorted.mat","XYZ", "xy");
+catch ME
+    sigma_d = 1;
+    sigma_i = 2;
+    NMS_size = 10;
+    thresh = 0.8;
+    gray_img = rgb2gray(img_I);
+    pts = HarrisCorner(gray_img, thresh, sigma_d, sigma_i, NMS_size);
+    [xy, XYZ] = InputCorners(img_I, pts);
+    save("../data/pts.mat","XYZ","xy");
+end   
+
+
+% load("distorted.mat");
 
 % === Task 2 DLT algorithm ===
 

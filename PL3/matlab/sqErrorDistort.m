@@ -11,7 +11,8 @@ function sqError = sqErrorDistort(P,k, xy, XYZ, center_coords)
             p2d_rec_no_dist = p2d_rec_no_dist / p2d_rec_no_dist(3);
             % computing radius
             diff = p2d_rec_no_dist - center_coords;
-            p2d_reconstructed = center_coords + diff.* polinome(diff);
+            r = norm(diff,2);
+            p2d_reconstructed = center_coords + diff.* polinome(r);
             sq_error = sq_error + sqrt((p2d_reconstructed(1) - p2d(1))^2 + (p2d_reconstructed(2) - p2d(2))^2);
     end
 end
