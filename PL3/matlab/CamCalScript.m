@@ -9,7 +9,7 @@ image(img_I);
 axis image
 
 % Decomposition Approach
-D_type = 'QR';
+D_type = 'EXP';
 %D_type = 'EXP';
 
 %This function displays the calibration image and allows the user to click
@@ -26,14 +26,16 @@ load("distorted.mat");
 % === Task 2 DLT algorithm ===
 
 [K, R, t, error] = runDLT(xy, XYZ, D_type);
-disp(error)
-
+disp('')
+fprintf('error : %d', error);
+disp('')
 
 % === Task 3 Gold algorithm ===
 
 [K, R, t, error] = runGold(xy, XYZ, D_type);
-disp(error)
-
+disp('')
+fprintf('error : %d', error);
+disp('')
 % === Task 4 Gold algorithm with radial distortion estimation ===
 
 w = size(img_I, 2);
