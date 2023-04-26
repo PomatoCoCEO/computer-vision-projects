@@ -10,8 +10,8 @@ image(img_I);
 axis image
 
 % Decomposition Approach
-D_type = 'QR';
-%D_type = 'EXP';
+D_type = 'EXP';
+% D_type = 'EXP';
 
 %This function displays the calibration image and allows the user to click
 %in the image to get the input points. Left click on the chessboard corners
@@ -26,7 +26,9 @@ try
     % tries to load the prerecorded points. if not present will ask for
     % input after corner determination
     load("../data/distorted.mat","XYZ", "xy");
+
 catch ME
+    disp("Choosing points")
     sigma_d = 1;
     sigma_i = 2;
     NMS_size = 10;
@@ -44,14 +46,14 @@ end
 
 [K, R, t, error] = runDLT(xy, XYZ, D_type);
 disp('')
-fprintf('error : %d', error);
+fprintf('DLT error : %d\n', error);
 disp('')
 
 % === Task 3 Gold algorithm ===
 
 [K, R, t, error] = runGold(xy, XYZ, D_type);
 disp('')
-fprintf('error : %d', error);
+fprintf('Gold error : %d\n', error);
 disp('')
 % === Task 4 Gold algorithm with radial distortion estimation ===
 
@@ -59,6 +61,7 @@ w = size(img_I, 2);
 h = size(img_I, 1);
 
 [K, R, t, Kd, error] = runGoldRadial(xy, XYZ, D_type, [w/2; h/2; 1]);
+fprintf("Gold radial error: %f\n",error);
 
 % === Bonus: Undistort input Image ===
 

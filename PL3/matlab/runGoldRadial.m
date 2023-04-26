@@ -36,7 +36,7 @@ else
 end
 
 %compute reprojection error
-rep_error = sqError(xy, XYZ, denormalized_camera);
+rep_error = sqErrorDistort(denormalized_camera, Kd, xy, XYZ, center_coords);
 error = rep_error;
 
 end

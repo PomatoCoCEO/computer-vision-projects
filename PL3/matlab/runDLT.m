@@ -10,7 +10,6 @@ function [K, R, t, error] = runDLT(xy, XYZ, D_type)
 denormalized_camera = T \ P_normalized * U;
 
 %factorize camera matrix in to K, R and t
-% ??? are we supposed to put C or t here?
 if strcmp(D_type, 'QR')
     [K, R, t] = decomposeQR(denormalized_camera);
 elseif strcmp(D_type, 'EXP')

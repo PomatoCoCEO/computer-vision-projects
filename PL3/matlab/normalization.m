@@ -20,9 +20,7 @@ xyn = ones([3, size(xy,2)]);
 xyn(1:2,:) = xy;
 XYZn = ones([4, size(XYZ,2)]);
 XYZn(1:3,:) = XYZ;
-disp('--------- Points -----------')
-xy
-disp('----------------------------')
+
 for i = 1:size(xy, 2)
     xyn(:,i) = T \ xyn(:,i);
     XYZn(:,i) = U \ XYZn(:,i);
