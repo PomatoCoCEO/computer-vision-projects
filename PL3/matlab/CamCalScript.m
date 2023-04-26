@@ -2,7 +2,7 @@
 %
 close all;
 
-IMG_NAME = '../images/image001.jpg';
+IMG_NAME = '../images/barrel.jpg';
 img_I = imread(IMG_NAME);
 image(img_I);
 %axis off
@@ -20,8 +20,8 @@ D_type = 'QR';
 %point.
 %You don't have to do this all the time, just store the resulting xy and
 %XYZ matrices and use them as input for your algorithms.
-% [xy XYZ] = getpoints(IMG_NAME);
-load("../data/coords.mat");
+%[xy XYZ] = getpoints(IMG_NAME);
+load("distorted.mat");
 
 % === Task 2 DLT algorithm ===
 
@@ -36,7 +36,10 @@ disp(error)
 
 % === Task 4 Gold algorithm with radial distortion estimation ===
 
-[K, R, t, Kd, error] = runGoldRadial(xy, XYZ, D_type, [width/2; height/2; 1]);
+w = size(img_I, 2);
+h = size(img_I, 1);
+
+[K, R, t, Kd, error] = runGoldRadial(xy, XYZ, D_type, [w/2; h/2; 1]);
 
 % === Bonus: Undistort input Image ===
 
