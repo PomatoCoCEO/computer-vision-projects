@@ -18,6 +18,7 @@ for i=1:20
 end
 
 pn = [pn(1:4); pn(5:8); pn(9:12)];
+Kd = pn(end-1:end);
 
 % denormalize camera matrix
 denormalized_camera = T \ pn * U;

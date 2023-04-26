@@ -1,26 +1,34 @@
-function [ Img_O ] = image_undistort(Img_I,K,R,t,Kd)
-%Remove distortion from Img_I, using the Camera Decomposition K,T,C and
-%Distortion Coeffients Kd
-    k1 = Kd(1);
-    k2 = Kd(2);
-    w = size(Img_I,2);
-    h = size(Img_I,1);
-    [x,y] = meshgrid(1:w,1:h);
-    w = ones(h,w);
-    X = cat(3,x,y,w);
-    % Convert to normalized coordinates - divide by the intrinsic matrix
-    X = K\X;
-    % Remove distortion
-    r2 = sum(X(1:2,:).^2,1);
-    X = X ./ X(3,:);
-    x = X(1,:).*(1+k1*r2+Kd(2)*r2.^2);
-    y = X(2,:).*(1+k1*r2+Kd(2)*r2.^2);
-    X = [x;y;w];
-    % Convert back to pixel coordinates
-    X = K*X;
-    % Convert to image coordinates
-    x = X(1,:);
-    y = X(2,:);
-    % Interpolate
-    Img_O = interp2(Img_I,x,y);
+function [Img_O] = image_undistort(Img_I, K, R, t, Kd)
+    % Get image size
+    Kd(1) = 0.5;
+    Kd(2) = 0.5;
+    [rows,cols,~] = size(Img_I);
+
+    % Generate a grid of pixel coordinates
+    [x,y] = meshgrid(1:cols,1:rows);
+
+    % Convert pixel coordinates to normalized coordinates
+    Xn = (x - K(1,3)) / K(1,1);
+    Yn = (y - K(2,3)) / K(2,2);
+    xcenter = (cols /2 - K(1,3)) / K(1,1);
+    ycenter = (rows /2 - K(2,3)) / K(2,2);
+
+    % Apply radial distortion correction
+    r2 = (Xn - xcenter).^2 + (Yn-ycenter).^2;
+    pol_diff = 1 + Kd(1)*r2 + Kd(2)* r2.^2;
+    Xn = xcenter + (Xn - xcenter)./ pol_diff;
+    Yn = ycenter + (Yn - ycenter)./ pol_diff;
+
+    % Convert normalized coordinates to pixel coordinates
+    x = Xn * K(1,1) + K(1,3);
+    y = Yn * K(2,2) + K(2,3);
+
+    % Apply extrinsic parameters to get final output image
+    P = [R t];
+    Img_O = zeros(size(Img_I));
+    for i=1:size(Img_I,3)
+        Img_O(:,:,i) = interp2(double(Img_I(:,:,i)),double(x),double(y));
+    end
+
+    imshow(Img_O)
 end

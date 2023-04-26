@@ -43,4 +43,4 @@ h = size(img_I, 1);
 
 % === Bonus: Undistort input Image ===
 
-% [UImage] = image_undistort(Img_I, K, R, t, Kd);
+[UImage] = image_undistort(img_I, K, R, t, Kd);
