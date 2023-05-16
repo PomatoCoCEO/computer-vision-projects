@@ -31,11 +31,11 @@ homogPointsp = [X(:,2), Y(:,2), ones(size(X,1),1)];
 FX = F * homogPoints';
 FTXp = F' * homogPointsp';
 
-for i = 1:size(X,1),
+for i = 1:size(X,1)
     Fxi = FX(:,i);
     FTxpi = FTXp(:,i);
     dist(i) = (homogPointsp(i,:)*Fxi)^2 * ((1/(Fxi(1)^2 + Fxi(2)^2)) + (1/(FTxpi(1)^2 + FTxpi(2)^2)));
-end;
+end
 
 d = sum(dist);
 
