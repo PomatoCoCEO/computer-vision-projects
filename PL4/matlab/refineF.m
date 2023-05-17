@@ -8,6 +8,7 @@ function F = refineF(F,pts1,pts2)
 X=[pts1(:,1) pts2(:,1)];
 Y=[pts1(:,2) pts2(:,2)];
 initF = F;
+fprintf("initial distance: %g\n",svd_distance(F,X,Y));
 
 %do the minimization
 minF = fminsearch (@svd_distance, initF, ...
@@ -18,6 +19,8 @@ minF = fminsearch (@svd_distance, initF, ...
                                         
 
 F = rank2F(minF);
+
+fprintf("final distance: %g\n",svd_distance(F,X,Y));
 
 
 

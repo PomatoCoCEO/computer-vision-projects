@@ -9,7 +9,7 @@ function [ptsn, tn] = normalize2d(pts)
     ptsn = pts_w * tn';
     ptsn = ptsn ./ ptsn(:,3);
 
-    new_dist = sum(vecnorm(ptsn - [0 0 1], 2,2)) / (size(pts ,1) * sqrt(2));
-    fprintf("New average distance: %f\n", new_dist);
+    % new_dist = sum(vecnorm(ptsn - [0 0 1], 2,2)) / (size(pts ,1) * sqrt(2));
+    % fprintf("New average distance: %f\n", new_dist);
 end
 

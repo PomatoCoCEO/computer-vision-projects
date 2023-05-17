@@ -8,7 +8,7 @@ load("../data/intrinsics.mat");
 F = computeF(pts1, pts2);
 % essential matrix, which allows the conversion of 2d metric points between
 % the 2 images
-E= K2' * F * K1;
+
 displayEpipolar(im1, im2, F);
 
 

@@ -21,6 +21,6 @@ function F = estimateF(pnl,pnr)
         for i = 1 : size(pnl, 1)
             tot_sq = tot_sq + (pnl(i,:) * F * pnr(i,:)')^2;
         end
-        fprintf("total squared error: %.4f", tot_sq);
+        % fprintf("total squared error: %.4f", tot_sq);
     end
 
