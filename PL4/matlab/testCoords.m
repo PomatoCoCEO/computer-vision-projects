@@ -30,9 +30,10 @@ pts3d = triangulation3D(Proj1, pts1_new, Proj2, pts2_new);
 plot3(pts3d(:,1), pts3d(:,2), pts3d(:,3),'.');
 xlabel('X'); ylabel('Y'); zlabel('Z');
 
-
-
-
+R1= Proj1(:,1:3);
+t1 = Proj1(:,4);
+R2 = Proj2(:,1:3);
+t2 = Proj2(:,4);
 
 
 save('../data/extrinsics.mat', 'R1', 't1', 'R2', 't2');

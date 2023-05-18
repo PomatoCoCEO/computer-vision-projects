@@ -26,7 +26,7 @@ rectImg(:,1:nC) = rectIL ;
 rectImg(:,nC+1:end) = rectIR ;
 
 % load gt info.
-load('../data/someCorresp.mat', 'pts1', 'pts2');
+load('../data/correspondences.mat', 'pts1', 'pts2');
 gtL = pts1(1:20:end, :)';
 gtR = pts2(1:20:end, :)';
 
