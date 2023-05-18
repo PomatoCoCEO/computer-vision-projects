@@ -24,7 +24,6 @@ function [pts2] = findEpipolarMatches(im1, im2, F, pts1)
         c = line_coords(i, 3);
         % ax + by + c = 0; y = -(ax + c)/b
         ys = round(-(a.*xs+c)/b);
-        size(ys)
         %{
         subplot(121);
         imshow(im1); hold on;
