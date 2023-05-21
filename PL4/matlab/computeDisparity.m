@@ -1,4 +1,4 @@
-function dispM = computeDisparity(im1, im2, maxDisp, windowSize)
+function dispM = computeDisparity(im1, im2, maxDisp, windowSize,criterion)
 % computeDisparity creates a disparity map from a pair of rectified images im1 and
 %   im2, given the maximum disparity MAXDISP and the window size WINDOWSIZE.
     sz = floor(windowSize / 2);
@@ -12,7 +12,7 @@ function dispM = computeDisparity(im1, im2, maxDisp, windowSize)
             w1 = pd1(y:y+windowSize-1, x:x+windowSize-1);
             for k = 0 : maxDisp
                 w2 = pd2(y:y+windowSize-1, x-k:x-k+windowSize-1);
-                curr_dist = dist_window(w1,w2,"ssd");
+                curr_dist = dist_window(w1,w2,criterion);
                 if curr_dist < opt_dist
                     opt_dist = curr_dist;
                     opt = k;

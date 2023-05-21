@@ -12,7 +12,7 @@ function F = estimateF(pnl,pnr)
 
     [~, ~, V_A] = svd(A);
     f_vals = V_A(:,end);
-    F_temp = reshape(f_vals, 3,3);
+    F_temp = reshape(f_vals, 3,3)';
     [U, S,V] = svd(F_temp);
     S(end, end) = 0;
     F = U * S * V';

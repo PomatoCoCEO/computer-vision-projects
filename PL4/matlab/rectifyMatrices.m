@@ -6,7 +6,7 @@ function [M1, M2, K1n, K2n, R1n, R2n, t1n, t2n] = ...
     c1 = - (K1 * R1)\K1 * t1;
     c2 = - (K2 * R2)\K2 * t2;
 
-    r1 = (c2 - c1) / norm(c2-c1,2);
+    r1 = (c2 - c1) / norm(c2-c1,2); % parallel to the baseline
     % the y axis must be perpendicular to both the x axis, r1, and the old
     % z axis, given by the third column of each rotation matrix
     r2_1 = cross(r1, R1(:,3));
@@ -29,3 +29,4 @@ function [M1, M2, K1n, K2n, R1n, R2n, t1n, t2n] = ...
     % rectification matrices
     M1 = K1n * R1n /(K1 * R1n);
     M2 = K2n * R2n /(K2 * R2n);
+end

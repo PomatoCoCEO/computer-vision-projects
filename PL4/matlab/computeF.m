@@ -10,8 +10,6 @@ function F = computeF(pts1, pts2)
     [pnr, t_matrixr] = normalize2d(pts2);
     F_normalized = estimateF(pnl, pnr);
     % force rank 2
-
-    F_pixels = t_matrixr' * F_normalized * t_matrixl;
-    F = F_pixels;
-    % F = refineF(F_pixels, pts1, pts2);
+    F = t_matrixr' * F_normalized * t_matrixl;
+    F = refineF(F, pts1, pts2)';
 end    
